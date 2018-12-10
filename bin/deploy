@@ -5,9 +5,12 @@ set -o errexit
 days=${DAYS:-30}
 schedule=${SCHEDULE:-rate(1 day)}
 region=${REGION:-$(aws configure get region)}
-profile=${AWS_PROFILE:default}
+profile=${AWS_PROFILE:-default}
+stack_name=${STACK_NAME:-LightsailAutoSnapshots}
 
 bucket_name="temp-lightsail-auto-snapshots-$(openssl rand -hex 8)"
+
+
 
 aws --profile $profile s3 mb "s3://${bucket_name}" --region $region
 
@@ -18,7 +21,7 @@ aws --profile $profile cloudformation package \
 
 aws --profile $profile cloudformation deploy \
   --template-file deploy/output.yaml \
-  --stack-name LightsailAutoSnapshots \
+  --stack-name $stack_name \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides "RetentionDays=${days}" "Schedule=${schedule}" \
   --region $region
