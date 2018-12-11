@@ -11,6 +11,10 @@ Parameters:
     Type: String
     Description: The number of days to retain snapshots.
     Default: 30
+  SnapshotSuffix:
+    Type: String
+    Description: A suffix at the end of the snapshot name to denote whether it should be deleted or not in thsi group
+    Default: auto
   Schedule:
     Type: String
     Description: Event schedule of create snapshot.
@@ -21,6 +25,8 @@ Metadata:
     ParameterLabels:
       RetentionDays:
         default: Retention Days
+      SnapshotSuffix:
+        default: Snapshot Suffix
       Schedule:
         default: Event Schedule
 
@@ -38,6 +44,7 @@ Resources:
       Environment:
         Variables:
           RETENTION_DAYS: !Ref RetentionDays
+          SNAPSHOT_SUFFIX: !Ref SnapshotSuffix
       Events:
         Schedule:
           Type: Schedule

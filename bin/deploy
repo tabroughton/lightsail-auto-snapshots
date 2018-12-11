@@ -23,7 +23,7 @@ aws --profile $profile cloudformation deploy \
   --template-file deploy/output.yaml \
   --stack-name $stack_name \
   --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides "RetentionDays=${days}" "Schedule=${schedule}" \
+  --parameter-overrides "RetentionDays=${days}" "SnapshotSuffix=auto${days}" "Schedule=${schedule}" \
   --region $region
 
 aws --profile $profile s3 rb --force "s3://${bucket_name}" --region $region
